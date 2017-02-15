@@ -1,6 +1,7 @@
 package com.spbsu.aqua;
 
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,23 +11,20 @@ import java.util.stream.Stream;
  */
 public class AquaApp {
 
-
-    public static final String USAGE = "Usage: aquaapp [wallSize1] [wallSize2] ...";
-
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            System.out.println(USAGE);
-            return;
-        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter wall sizes separated by ',' (e.g. \"2,3,4,5\"):\n");
+        String s = br.readLine();
+        br.close();
 
         List<Integer> heights;
         try {
-            heights = Stream.of(args).map(Integer::parseInt).collect(Collectors.toList());
+            heights = Stream.of(s.split(",")).map(Integer::parseInt).collect(Collectors.toList());
         } catch (NumberFormatException e) {
-            System.out.println(String.format("Invalid arguments: %s\n%s", e.getMessage(), USAGE));
+            System.out.println(String.format("Invalid arguments: %s", e.getMessage()));
             return;
         }
-        // = Arrays.asList(2, 5, 1, 3, 1, 2, 1, 7, 7, 6);
+
         WallWorld wallWorld = new WallWorld(heights);
         wallWorld.drawWorld();
     }
